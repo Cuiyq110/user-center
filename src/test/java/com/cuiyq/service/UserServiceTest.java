@@ -74,5 +74,12 @@ public class UserServiceTest {
         checkPassword = "1234567";
         result = userService.register(userAccount, userPassword, checkPassword);
         Assertions.assertEquals(-1, result);
+
+//        正常插入
+        userAccount = "cuiyq1";
+        userPassword = "12345678";
+        checkPassword = "12345678";
+        result = userService.register(userAccount, userPassword, checkPassword);
+        Assertions.assertTrue(result > 0);
     }
 }
