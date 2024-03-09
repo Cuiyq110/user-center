@@ -42,7 +42,17 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public User userLogin(String userAccount, String userPassword, HttpServletRequest request) {
-        return userService.userLogin(userAccount, userPassword, request);
+    public User userLogin(@RequestBody UserRegisterRequest userRegisterRequest, HttpServletRequest request) {
+        if (userRegisterRequest == null) {
+            return null;
+        }
+        String userAccount = userRegisterRequest.getUserAccount();
+        String userPassword = userRegisterRequest.getUserPassword();
+        if (StringUtils.isAnyBlank(userAccount, userPassword)) {
+            return null;
+        }
+        User user = userService.userLogin(userAccount, userPassword, request);
+        return user;
+
     }
 }

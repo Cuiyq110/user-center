@@ -39,7 +39,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         }
 
 //        长度不小于4位
-        if (userPassword.length() < 4) {
+        if (userAccount.length() < 4) {
             return -1;
         }
 
@@ -92,7 +92,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         }
 
 //        长度不小于4位
-        if (userPassword.length() < 4) {
+        if (userAccount.length() < 4) {
             return null;
         }
 
