@@ -1,6 +1,6 @@
 package com.cuiyq.mapper;
 
-import com.cuiyq.domain.User;
+import com.cuiyq.model.domain.User;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**

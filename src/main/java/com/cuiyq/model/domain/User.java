@@ -1,4 +1,4 @@
-package com.cuiyq.domain;
+package com.cuiyq.model.domain;
 
 import com.baomidou.mybatisplus.annotation.*;
 

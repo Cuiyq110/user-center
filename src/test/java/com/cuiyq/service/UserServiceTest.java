@@ -2,7 +2,7 @@ package com.cuiyq.service;
 
 import java.util.Date;
 
-import com.cuiyq.domain.User;
+import com.cuiyq.model.domain.User;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

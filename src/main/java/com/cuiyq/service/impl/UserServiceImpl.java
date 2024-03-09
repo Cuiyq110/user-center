@@ -1,9 +1,8 @@
 package com.cuiyq.service.impl;
-import java.util.Date;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.cuiyq.domain.User;
+import com.cuiyq.model.domain.User;
 import com.cuiyq.service.UserService;
 import com.cuiyq.mapper.UserMapper;
 import lombok.extern.slf4j.Slf4j;

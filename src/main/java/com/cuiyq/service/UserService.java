@@ -1,9 +1,8 @@
 package com.cuiyq.service;
 
-import com.cuiyq.domain.User;
+import com.cuiyq.model.domain.User;
 import com.baomidou.mybatisplus.extension.service.IService;
 
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 
 /**
