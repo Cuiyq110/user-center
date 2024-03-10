@@ -15,8 +15,6 @@ import lombok.NoArgsConstructor;
  */
 @TableName(value ="user")
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
 public class User implements Serializable {
     /**
      * 

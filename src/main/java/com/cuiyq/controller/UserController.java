@@ -112,6 +112,9 @@ public class UserController {
     public boolean isAdmin(HttpServletRequest request) {
         Object attribute = request.getSession().getAttribute(USER_LOGIN_STATE);
         User user = (User) attribute;
-        return null != user && user.getUserRole() == ADMIN_USERROLE;
+        if (user == null) {
+            return false;
+        }
+        return user.getUserRole() == ADMIN_USERROLE;
     }
 }

@@ -1,4 +1,5 @@
 package com.cuiyq.service.impl;
+import java.util.Date;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -133,9 +134,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         safetyUser.setAvatarUrl(user.getAvatarUrl());
         safetyUser.setGender(user.getGender());
         safetyUser.setEmail(user.getEmail());
+        safetyUser.setUserStatus(user.getUserStatus());
         safetyUser.setPhone(user.getPhone());
         safetyUser.setCreateTime(user.getCreateTime());
-        safetyUser.setUserStatus(user.getUserStatus());
+        safetyUser.setUserRole(user.getUserRole());
 
 //        保存登录态
         request.getSession().setAttribute(USER_LOGIN_STATE, safetyUser);
