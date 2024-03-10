@@ -4,7 +4,10 @@ import com.baomidou.mybatisplus.annotation.*;
 
 import java.io.Serializable;
 import java.util.Date;
+
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * 用户表
@@ -12,6 +15,8 @@ import lombok.Data;
  */
 @TableName(value ="user")
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class User implements Serializable {
     /**
      * 
@@ -74,6 +79,11 @@ public class User implements Serializable {
      */
     @TableLogic
     private Integer isDelete;
+
+    /**
+     * 是否为管理员
+     */
+    private Integer userRole;
 
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;

@@ -15,6 +15,8 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static com.cuiyq.contant.UserContant.USER_LOGIN_STATE;
+
 
 /**
  * @author cuiyq
@@ -26,7 +28,7 @@ import java.util.regex.Pattern;
 public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         implements UserService {
 
-
+    private static  String SALT = "cuiyq"; //密码盐
     @Resource
     private UserMapper userMapper;
 
@@ -140,6 +142,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
 
         return safetyUser;
     }
+
 }
 
 

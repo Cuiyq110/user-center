@@ -1,7 +1,7 @@
 package com.cuiyq.service;
 
-import com.cuiyq.model.domain.User;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.cuiyq.model.domain.User;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -12,9 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 */
 public interface UserService extends IService<User> {
 
-       String SALT = "cuiyq"; //密码盐
 
-       String USER_LOGIN_STATE = "userLoginState";
     /**
      * 注册
      * @param userAccount 用户名

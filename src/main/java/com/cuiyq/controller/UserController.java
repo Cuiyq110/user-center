@@ -1,16 +1,21 @@
 package com.cuiyq.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.cuiyq.model.domain.User;
 import com.cuiyq.model.domain.request.UserRegisterRequest;
 import com.cuiyq.service.UserService;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.apache.ibatis.annotations.Param;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static com.cuiyq.contant.UserContant.ADMIN_USERROLE;
+import static com.cuiyq.contant.UserContant.USER_LOGIN_STATE;
 
 /**
  * @author cuiyq
@@ -54,5 +59,59 @@ public class UserController {
         User user = userService.userLogin(userAccount, userPassword, request);
         return user;
 
+    }
+
+    /**
+     * 根据用户名模糊查询
+     *
+     * @return
+     */
+    @GetMapping("/search")
+    public List<User> userSearch(String username, HttpServletRequest request) {
+
+//        鉴权
+        if (!isAdmin(request)) { //如果不是管理员，返回一个空数组
+            return new ArrayList<>();
+        }
+        QueryWrapper queryWrapper = new QueryWrapper<User>();
+        if (StringUtils.isNoneBlank(username)) {
+            queryWrapper.like("username", username);
+        }
+
+        return userService.list(queryWrapper);
+    }
+
+
+    /**
+     * 删除用户
+     *
+     * @param id 用户id
+     * @return
+     */
+    @PostMapping("/delete")
+    public boolean userDelete(@Param("id") Long id,HttpServletRequest request) {
+//      鉴权
+        if (!isAdmin(request)) {
+            return false;
+        }
+
+//      如果id <=0则代表错误
+            if (id <= 0) {
+                return false;
+            }
+
+        return userService.removeById(id);
+    }
+
+    /**
+     * 判断是否是管理员
+     *
+     * @param request
+     * @return
+     */
+    public boolean isAdmin(HttpServletRequest request) {
+        Object attribute = request.getSession().getAttribute(USER_LOGIN_STATE);
+        User user = (User) attribute;
+        return null != user && user.getUserRole() == ADMIN_USERROLE;
     }
 }
