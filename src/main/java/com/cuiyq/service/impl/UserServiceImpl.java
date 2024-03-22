@@ -28,7 +28,7 @@ import static com.cuiyq.contant.UserContant.USER_LOGIN_STATE;
 public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         implements UserService {
 
-    private static  String SALT = "cuiyq"; //密码盐
+    private static String SALT = "cuiyq"; //密码盐
     @Resource
     private UserMapper userMapper;
 
@@ -39,7 +39,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     }
 
     @Override
-    public long userRegister(String userAccount, String userPassword, String checkPassword) {
+    public long userRegister(String userAccount, String userPassword, String checkPassword, String planetCode) {
 
 //        判断非空
         if (StringUtils.isAnyBlank(userAccount, userPassword, checkPassword)) {
@@ -56,6 +56,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
             return -1;
         }
 
+//        补充对星球验证码的校验，不能大于5
+        if (planetCode.length() > 5) {
+            return -1;
+        }
+
 //        账户不能重复
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("userAccount", userAccount);
@@ -64,6 +69,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
             return -1;
         }
 
+        //星球验证码不能重复
+        queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("planetCode", planetCode);
+        count = userMapper.selectCount(queryWrapper);
+        if (count > 0) {
+            return -1;
+        }
 
         // 账户不能包含特殊字符
         String validPattern = "\\pP|\\pS|\\s+";
@@ -84,6 +96,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         User user = new User();
         user.setUserAccount(userAccount);
         user.setUserPassword(encryptedPassword);
+        user.setPlanetCode(planetCode);
         boolean save = this.save(user);
 
         if (!save) {
@@ -140,7 +153,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         return safetyUser;
     }
 
-//    用户脱敏方法
+    //    用户脱敏方法
     @Override
     public User getSafetyUser(User user) {
         if (user == null) {
@@ -157,6 +170,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         safetyUser.setPhone(user.getPhone());
         safetyUser.setCreateTime(user.getCreateTime());
         safetyUser.setUserRole(user.getUserRole());
+        safetyUser.setPlanetCode(user.getPlanetCode());
         return safetyUser;
     }
 

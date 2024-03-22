@@ -2,7 +2,6 @@ package com.cuiyq.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.cuiyq.model.domain.User;
-import org.springframework.objenesis.instantiator.util.UnsafeUtils;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -19,9 +18,10 @@ public interface UserService extends IService<User> {
      * @param userAccount 用户名
      * @param userPassword 密码
      * @param checkPassword 校验密码
+     * @param planetCode 星球验证码
      * @return 返回id
      */
-    long userRegister(String userAccount, String userPassword, String checkPassword);
+    long userRegister(String userAccount, String userPassword, String checkPassword, String planetCode);
 
 
     /**
