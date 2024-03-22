@@ -34,7 +34,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
 
     @Override
     public Integer userLogout(HttpServletRequest request) {
-        return null;
+        request.getSession().removeAttribute(USER_LOGIN_STATE);
+        return 1;
     }
 
     @Override

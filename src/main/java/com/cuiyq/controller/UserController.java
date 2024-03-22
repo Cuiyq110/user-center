@@ -29,6 +29,18 @@ public class UserController {
 
     @Resource
     private UserService userService;
+
+
+    @PostMapping("/logout")
+    public Integer userLogout( HttpServletRequest request) {
+        if (request == null) {
+            return null;
+        }
+
+//        移除登录态
+        Integer result = userService.userLogout(request);
+        return result;
+    }
     @PostMapping("/register")
     public Long userRegister(@RequestBody UserRegisterRequest userRegisterRequest) {
 
