@@ -1,5 +1,4 @@
 package com.cuiyq.service.impl;
-import java.util.Date;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -32,6 +31,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     private static  String SALT = "cuiyq"; //密码盐
     @Resource
     private UserMapper userMapper;
+
+    @Override
+    public Integer userLogout(HttpServletRequest request) {
+        return null;
+    }
 
     @Override
     public long userRegister(String userAccount, String userPassword, String checkPassword) {
@@ -127,6 +131,20 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         }
 
 //        用户脱敏
+        User safetyUser = getSafetyUser(user);
+
+//        保存登录态
+        request.getSession().setAttribute(USER_LOGIN_STATE, safetyUser);
+
+        return safetyUser;
+    }
+
+//    用户脱敏方法
+    @Override
+    public User getSafetyUser(User user) {
+        if (user == null) {
+            return null;
+        }
         User safetyUser = new User();
         safetyUser.setId(user.getId());
         safetyUser.setUsername(user.getUsername());
@@ -138,12 +156,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         safetyUser.setPhone(user.getPhone());
         safetyUser.setCreateTime(user.getCreateTime());
         safetyUser.setUserRole(user.getUserRole());
-
-//        保存登录态
-        request.getSession().setAttribute(USER_LOGIN_STATE, safetyUser);
-
         return safetyUser;
     }
+
 
 }
 

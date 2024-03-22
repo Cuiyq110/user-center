@@ -2,6 +2,7 @@ package com.cuiyq.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.cuiyq.model.domain.User;
+import org.springframework.objenesis.instantiator.util.UnsafeUtils;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -32,4 +33,17 @@ public interface UserService extends IService<User> {
 
     User userLogin(String userAccount, String userPassword, HttpServletRequest request);
 
+    /**
+     *     用户脱敏方法
+     * @param user
+     * @return
+     */
+    User getSafetyUser(User user);
+
+    /**
+     * 用户注销
+     * @param request 用户登录态
+     * @return
+     */
+    Integer userLogout(HttpServletRequest request);
 }

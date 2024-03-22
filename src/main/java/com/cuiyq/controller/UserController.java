@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.cuiyq.contant.UserContant.ADMIN_USERROLE;
 import static com.cuiyq.contant.UserContant.USER_LOGIN_STATE;
@@ -28,7 +29,6 @@ public class UserController {
 
     @Resource
     private UserService userService;
-
     @PostMapping("/register")
     public Long userRegister(@RequestBody UserRegisterRequest userRegisterRequest) {
 
@@ -56,8 +56,8 @@ public class UserController {
         if (StringUtils.isAnyBlank(userAccount, userPassword)) {
             return null;
         }
-        User user = userService.userLogin(userAccount, userPassword, request);
-        return user;
+        User safetyUser = userService.userLogin(userAccount, userPassword, request);
+        return safetyUser;
 
     }
 
@@ -70,7 +70,10 @@ public class UserController {
     public List<User> userSearch(String username, HttpServletRequest request) {
 
 //        鉴权
-        if (!isAdmin(request)) { //如果不是管理员，返回一个空数组
+        /**
+         * //如果不是管理员，返回一个空数组
+         */
+        if (!isAdmin(request)) {
             return new ArrayList<>();
         }
         QueryWrapper queryWrapper = new QueryWrapper<User>();
@@ -78,7 +81,11 @@ public class UserController {
             queryWrapper.like("username", username);
         }
 
-        return userService.list(queryWrapper);
+        List<User> UserList = userService.list(queryWrapper);
+        List<User> list = UserList.stream()
+                .map(user -> userService.getSafetyUser(user))
+                .collect(Collectors.toList());
+        return list;
     }
 
 
