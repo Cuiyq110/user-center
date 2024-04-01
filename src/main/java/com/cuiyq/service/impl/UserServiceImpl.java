@@ -2,6 +2,8 @@ package com.cuiyq.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.cuiyq.common.ErrorCode;
+import com.cuiyq.exception.BusinessException;
 import com.cuiyq.model.domain.User;
 import com.cuiyq.service.UserService;
 import com.cuiyq.mapper.UserMapper;
@@ -43,22 +45,22 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
 
 //        判断非空
         if (StringUtils.isAnyBlank(userAccount, userPassword, checkPassword)) {
-            return -1;
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "参数为空");
         }
 
 //        长度不小于4位
         if (userAccount.length() < 4) {
-            return -1;
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "用户账号过短");
         }
 
 //        密码不小于8位
         if (userPassword.length() < 8 || checkPassword.length() < 8) {
-            return -1;
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "用户密码过短");
         }
 
 //        补充对星球验证码的校验，不能大于5
         if (planetCode.length() > 5) {
-            return -1;
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "星球编号过长");
         }
 
 //        账户不能重复
@@ -66,7 +68,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         queryWrapper.eq("userAccount", userAccount);
         Long count = userMapper.selectCount(queryWrapper);
         if (count > 0) {
-            return -1;
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "账号重复");
         }
 
         //星球验证码不能重复
@@ -74,19 +76,19 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         queryWrapper.eq("planetCode", planetCode);
         count = userMapper.selectCount(queryWrapper);
         if (count > 0) {
-            return -1;
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "验证码重复");
         }
 
         // 账户不能包含特殊字符
         String validPattern = "\\pP|\\pS|\\s+";
         Matcher matcher = Pattern.compile(validPattern).matcher(userAccount);
         if (matcher.find()) {
-            return -1;
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "账号含有特殊字符");
         }
 
 //      密码和校验密码相同
         if (!userPassword.equals(checkPassword)) {
-            return -1;
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "两次密码不一致");
         }
 
 //        对密码进行加密
@@ -100,7 +102,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         boolean save = this.save(user);
 
         if (!save) {
-            return -1;
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "保存数据库失败");
         }
         return user.getId();
     }
@@ -109,17 +111,17 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     public User userLogin(String userAccount, String userPassword, HttpServletRequest request) {
         //        判断非空
         if (StringUtils.isAnyBlank(userAccount, userPassword)) {
-            return null;
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "账号密码不能为空");
         }
 
 //        长度不小于4位
         if (userAccount.length() < 4) {
-            return null;
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "账号长度小于4位");
         }
 
 //        密码不小于8位
         if (userPassword.length() < 8) {
-            return null;
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "密码小于8位");
         }
 
 
@@ -127,7 +129,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         String validPattern = "\\pP|\\pS|\\s+";
         Matcher matcher = Pattern.compile(validPattern).matcher(userAccount);
         if (matcher.find()) {
-            return null;
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "账号包含特殊字符");
         }
 
 //        对密码进行加密
@@ -141,7 +143,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
 //        用户不存在
         if (user == null) {
             log.info("user login failed, userAccount cannot match userPassword");
-            return null;
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "账号不存在或密码不正确");
         }
 
 //        用户脱敏

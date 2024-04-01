@@ -75,10 +75,13 @@ public class UserServiceTest {
         Assertions.assertEquals(-1, result);
 
 //        正常插入
-        userAccount = "cuiyq1";
+        userAccount = "cuiyq2";
         userPassword = "12345678";
         checkPassword = "12345678";
+        planetCode = "101";
         result = userService.userRegister(userAccount, userPassword, checkPassword,planetCode);
-        Assertions.assertTrue(result > 0);
+        Assertions.assertTrue(result > 0); //正常插入
+//        Assertions.assertEquals(-1, result);
+
     }
 }
