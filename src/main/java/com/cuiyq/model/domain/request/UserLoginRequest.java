@@ -9,7 +9,7 @@ import java.io.Serializable;
 /**
  * @version V1.0
  * @Title:
- * @Description:
+ * @Description: 用户登录请求体
  * @Copyright 2024 Cuiyq
  * @author: Cuiyq
  * @date: 2024/3/9$ 23:20$
