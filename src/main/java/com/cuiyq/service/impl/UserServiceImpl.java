@@ -76,7 +76,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         queryWrapper.eq("planetCode", planetCode);
         count = userMapper.selectCount(queryWrapper);
         if (count > 0) {
-            throw new BusinessException(ErrorCode.PARAMS_ERROR, "验证码重复");
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "编号重复");
         }
 
         // 账户不能包含特殊字符
@@ -99,6 +99,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         user.setUserAccount(userAccount);
         user.setUserPassword(encryptedPassword);
         user.setPlanetCode(planetCode);
+        /**
+         * 自动添加默认头像
+         */
+        user.setAvatarUrl("http://image.cuiyq.top//img/0");
         boolean save = this.save(user);
 
         if (!save) {
