@@ -113,6 +113,11 @@ public class UserController {
         }
 
         List<User> UserList = userService.list(queryWrapper);
+
+        //用户不存在
+        if (UserList.isEmpty()) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "用户不存在");
+        }
         List<User> list = UserList.stream()
                 .map(user -> userService.getSafetyUser(user))
                 .collect(Collectors.toList());
