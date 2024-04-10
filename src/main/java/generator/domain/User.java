@@ -1,12 +1,12 @@
-package com.cuiyq.model.domain;
+package generator.domain;
 
-import com.baomidou.mybatisplus.annotation.*;
-import lombok.Data;
-
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
 import java.util.Date;
-
-
+import lombok.Data;
 
 /**
  * 用户表
@@ -74,7 +74,6 @@ public class User implements Serializable {
     /**
      * 是否删除
      */
-    @TableLogic
     private Integer isDelete;
 
     /**
@@ -88,7 +87,7 @@ public class User implements Serializable {
     private String planetCode;
 
     /**
-     * 用户标签
+     * 标签列表
      */
     private String tags;
 

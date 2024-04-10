@@ -2,6 +2,9 @@ package com.cuiyq.service;
 
 import com.cuiyq.model.domain.Tag;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.cuiyq.model.domain.User;
+
+import java.util.List;
 
 /**
 * @author cuiyq
@@ -9,5 +12,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
 * @createDate 2024-04-10 22:16:06
 */
 public interface TagService extends IService<Tag> {
+
 
 }

@@ -48,3 +48,5 @@ insert into user (username, userAccount, avatarUrl, gender, userPassword, email,
                                                                                                                                           ('吴十八', 'wushiba456', 'https://example.com/avatar16.jpg', 2, 'passwordW18', 'wushiba@example.com', 1, '147258369', '2024-03-05 12:00:00', '2024-03-05 12:00:00', 0),
                                                                                                                                           ('郑十九', 'zhengshijiu789', 'https://example.com/avatar17.jpg', 1, 'passwordZ19', 'zhengshijiu@example.com', 0, '369258147', '2024-03-05 12:00:00', '2024-03-05 12:00:00', 0),
                                                                                                                                           ('王二十', 'wangershi123', 'https://example.com/avatar18.jpg', 2, 'passwordW20', 'wangershi@example.com', 1, '258369147', '2024-03-05 12:00:00', '2024-03-05 12:00:00', 0);
+
+alter table user add column tags varchar(1024) null comment '标签列表';
