@@ -1,12 +1,8 @@
-mybatis:
-    #session失效时间一天
-    session:
-        timeout: 86400
 spring:
     datasource:
-        driver-class-name: com.mysql.jdbc.Driver
+        driver-class-name: com.mysql.cj.jdbc.Driver
         username: user_center_prod
         password: 123456
         url: jdbc:mysql://120.55.125.187:3306/user_center_prod
-
-
+server:
+    address: 0.0.0.0

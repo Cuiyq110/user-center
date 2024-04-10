@@ -12,7 +12,7 @@ spring:
         timeout: 86400
 
     datasource:
-        driver-class-name: com.mysql.jdbc.Driver
+        driver-class-name: com.mysql.cj.jdbc.Driver
         username: cuiyq
         password: 123456
         url: jdbc:mysql://120.55.125.187:3306/cuiyq
