@@ -6,7 +6,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
 @MapperScan("com.cuiyq.mapper")
-class UserCenterApplicationTests {
+class PartnerMatchApplicationTests {
 
     @Test
     void contextLoads() {

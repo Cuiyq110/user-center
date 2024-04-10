@@ -7,7 +7,7 @@ server:
         context-path: /api
 spring:
     application:
-        name: user-center
+        name: partner-match
     session:
         timeout: 86400
 
