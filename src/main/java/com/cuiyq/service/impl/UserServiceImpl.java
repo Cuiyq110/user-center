@@ -1,5 +1,7 @@
 package com.cuiyq.service.impl;
 
+
+
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.cuiyq.common.ErrorCode;
@@ -10,12 +12,16 @@ import com.cuiyq.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.DigestUtils;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import static com.cuiyq.contant.UserContant.USER_LOGIN_STATE;
 
@@ -38,6 +44,35 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     public Integer userLogout(HttpServletRequest request) {
         request.getSession().removeAttribute(USER_LOGIN_STATE);
         return 1;
+    }
+
+    /**
+     * 根据标签搜索用户
+     *
+     * @param tagNameList 标签json表
+     * @return
+     */
+    @Override
+    public List<User> searchUserByTags(List<String> tagNameList) {
+       if (CollectionUtils.isEmpty(tagNameList)) {
+           throw new BusinessException(ErrorCode.PARAMS_ERROR);
+       }
+//       拼接and语句
+        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+        for (String tagName : tagNameList) {
+            queryWrapper = queryWrapper.like("tags", tagName);
+        }
+
+        List<User> userList = userMapper.selectList(queryWrapper);
+        //返回一个脱敏的集合
+        return userList.stream()
+                .map((User -> getSafetyUser(User)))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<User> searchUserByTagsMemeory(List<String> tagNameList) {
+        return List.of();
     }
 
     @Override
@@ -177,6 +212,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         safetyUser.setCreateTime(user.getCreateTime());
         safetyUser.setUserRole(user.getUserRole());
         safetyUser.setPlanetCode(user.getPlanetCode());
+        safetyUser.setTags(user.getTags());
         return safetyUser;
     }
 

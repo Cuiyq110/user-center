@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.cuiyq.model.domain.User;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 /**
 * @author cuiyq
@@ -46,4 +47,19 @@ public interface UserService extends IService<User> {
      * @return
      */
     Integer userLogout(HttpServletRequest request);
+
+    /**
+     * 根据标签搜索
+     * @param tagNameList 标签json
+     * @return
+     */
+    List<User> searchUserByTags(List<String> tagNameList);
+
+    /**
+     * 根据标签搜索，搜索出来放到内存里进行判断
+     * @param tagNameList 标签json
+     * @return
+     */
+    List<User> searchUserByTagsMemeory(List<String> tagNameList);
+
 }

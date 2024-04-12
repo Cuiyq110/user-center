@@ -1,13 +1,19 @@
 package com.cuiyq.service;
 
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 import com.cuiyq.model.domain.User;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.util.Assert;
 
 import javax.annotation.Resource;
+
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 
 @SpringBootTest
 public class UserServiceTest {
@@ -32,7 +38,7 @@ public class UserServiceTest {
 
         boolean save = userService.save(user);
         System.out.println(user.getId());
-        Assertions.assertTrue(save);
+        assertTrue(save);
     }
 
     @Test
@@ -80,8 +86,26 @@ public class UserServiceTest {
         checkPassword = "12345678";
         planetCode = "101";
         result = userService.userRegister(userAccount, userPassword, checkPassword,planetCode);
-        Assertions.assertTrue(result > 0); //正常插入
+        assertTrue(result > 0); //正常插入
 //        Assertions.assertEquals(-1, result);
 
+    }
+
+    @Test
+    void searchUserByTags() {
+//        Java和python紧贴在一起
+        List<String> tagNameList = Arrays.asList("java", "python");
+        List<User> userList = userService.searchUserByTags(tagNameList);
+        assertTrue(userList.size() > 0);
+
+//        java和python中间搁着其他标签
+         tagNameList = Arrays.asList("java", "python");
+        userList = userService.searchUserByTags(tagNameList);
+        assertTrue(userList.size() > 1);
+
+        //        只有java (false)
+/*        tagNameList = Arrays.asList("java", "python");
+        userList = userService.searchUserByTags(tagNameList);
+        assertTrue(userList.size() > 2); */
     }
 }
