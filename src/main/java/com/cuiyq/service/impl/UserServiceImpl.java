@@ -49,13 +49,14 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     }
 
     /**
-     * 根据标签搜索用户
+     * 根据标签搜索用户(sql查询版)（已弃用）
      *
      * @param tagNameList 标签json表
      * @return
      */
+    @Deprecated
     @Override
-    public List<User> searchUserByTags(List<String> tagNameList) {
+    public List<User> searchUserByTagsBySql(List<String> tagNameList) {
         if (CollectionUtils.isEmpty(tagNameList)) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
@@ -73,12 +74,12 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     }
 
     /**
-     * 根据标签搜索用户内存
+     * 根据标签搜索用户内存(内存过滤版)
      * @param tagNameList 标签json
      * @return
      */
     @Override
-    public List<User> searchUserByTagsMemory(List<String> tagNameList) {
+    public List<User> searchUserByTags(List<String> tagNameList) {
         if (CollectionUtils.isEmpty(tagNameList)) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "参数为空");
         }

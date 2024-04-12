@@ -90,6 +90,28 @@ public class UserServiceTest {
 
     }
 
+    /**
+     * 测试根据标签搜索用户（SQL实现） 已弃用
+     */
+    @Test
+    void searchUserByTagsBySql() {
+//        Java和python紧贴在一起
+        List<String> tagNameList = Arrays.asList("java", "python");
+        List<User> userList = userService.searchUserByTagsBySql(tagNameList);
+        assertTrue(userList.size() > 0);
+
+//        java和python中间搁着其他标签
+        tagNameList = Arrays.asList("java", "python");
+        userList = userService.searchUserByTagsBySql(tagNameList);
+        assertTrue(userList.size() > 1);
+
+        //        只有java (false)
+/*        tagNameList = Arrays.asList("java", "python");
+        userList = userService.searchUserByTags(tagNameList);
+        assertTrue(userList.size() > 2); */
+    }
+
+
     @Test
     void searchUserByTags() {
 //        Java和python紧贴在一起
@@ -106,29 +128,10 @@ public class UserServiceTest {
 /*        tagNameList = Arrays.asList("java", "python");
         userList = userService.searchUserByTags(tagNameList);
         assertTrue(userList.size() > 2); */
-    }
-
-
-    @Test
-    void searchUserByTagsMemory() {
-//        Java和python紧贴在一起
-        List<String> tagNameList = Arrays.asList("java", "python");
-        List<User> userList = userService.searchUserByTagsMemory(tagNameList);
-        assertTrue(userList.size() > 0);
-
-//        java和python中间搁着其他标签
-        tagNameList = Arrays.asList("java", "python");
-        userList = userService.searchUserByTagsMemory(tagNameList);
-        assertTrue(userList.size() > 1);
-
-        //        只有java (false)
-/*        tagNameList = Arrays.asList("java", "python");
-        userList = userService.searchUserByTags(tagNameList);
-        assertTrue(userList.size() > 2); */
 
         //        java和不存在
         tagNameList = Arrays.asList("java", "null");
-        userList = userService.searchUserByTagsMemory(tagNameList);
+        userList = userService.searchUserByTags(tagNameList);
         assertTrue(userList.size() == 0); //等于0
     }
 }

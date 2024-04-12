@@ -48,18 +48,19 @@ public interface UserService extends IService<User> {
      */
     Integer userLogout(HttpServletRequest request);
 
+
     /**
-     * 根据标签搜索
-     * @param tagNameList 标签json
+     * 根据标签搜索用户（已弃用）
+     *
+     * @param tagNameList 标签json表
      * @return
      */
-    List<User> searchUserByTags(List<String> tagNameList);
-
+    List<User> searchUserByTagsBySql(List<String> tagNameList);
     /**
      * 根据标签搜索，搜索出来放到内存里进行判断
      * @param tagNameList 标签json
      * @return
      */
-    List<User> searchUserByTagsMemory(List<String> tagNameList);
+    List<User> searchUserByTags(List<String> tagNameList);
 
 }
