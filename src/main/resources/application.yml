@@ -6,6 +6,12 @@ server:
     servlet:
         context-path: /api
 spring:
+    mvc:
+        pathmatch:
+            matching-strategy: ant_path_matcher
+    profiles:
+        active: dev
+
     application:
         name: partner-match
     session:
