@@ -10,6 +10,7 @@ import com.cuiyq.model.domain.request.UserRegisterRequest;
 import com.cuiyq.service.UserService;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -32,6 +33,7 @@ public class UserController {
 
     @Resource
     private UserService userService;
+
 
 
     @PostMapping("/logout")
@@ -124,6 +126,20 @@ public class UserController {
         return ResultUtils.success(list);
     }
 
+    /**
+     * 根据标签查询
+     *
+     * @param tagNameList
+     * @return
+     */
+    @GetMapping("/search/tags")
+    public BaseResponse<List<User>> searchUserByTags( @RequestParam(required = false)List<String> tagNameList) {
+        if (CollectionUtils.isEmpty(tagNameList)) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR,"参数为空");
+        }
+        List<User> userList = userService.searchUserByTags(tagNameList);
+        return ResultUtils.success(userList);
+    }
 
     /**
      * 删除用户
