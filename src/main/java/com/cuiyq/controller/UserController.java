@@ -29,6 +29,7 @@ import static com.cuiyq.contant.UserContant.USER_LOGIN_STATE;
  */
 @RestController
 @RequestMapping("/user")
+@CrossOrigin(origins = {"http://localhost:5173"})
 public class UserController {
 
     @Resource
