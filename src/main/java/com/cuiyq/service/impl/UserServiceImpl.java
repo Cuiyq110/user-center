@@ -25,6 +25,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import static com.cuiyq.contant.UserContant.ADMIN_USERROLE;
 import static com.cuiyq.contant.UserContant.USER_LOGIN_STATE;
 
 
@@ -104,6 +105,74 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
             }
             return true;
         }).map(user -> getSafetyUser(user)).collect(Collectors.toList());
+    }
+
+    /**
+     * 用户信息修改
+     * @param user
+     * @param loginUser
+     * @return
+     */
+    @Override
+    public Integer updateUser(User user, User loginUser) {
+        long userId = user.getId();
+        if (userId <= 0 ) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+//        判断仅管理员和自己可以修改
+        if (!isAdmin(loginUser) && userId != loginUser.getId()) {
+            throw new BusinessException(ErrorCode.NO_AUTH);
+        }
+
+//        从数据库中查找用户
+        User userold = userMapper.selectById(userId);
+        if (userold == null) {
+            throw new BusinessException(ErrorCode.NULL_ERROR);
+        }
+        return userMapper.updateById(user);
+    }
+
+    /**
+     * 获取当前用户信息
+     * @param request
+     * @return
+     */
+    @Override
+    public User getLoginUser(HttpServletRequest request) {
+        if (request == null) {
+            return null;
+        }
+        Object attribute = request.getSession().getAttribute(USER_LOGIN_STATE);
+        if (attribute == null) {
+            throw new BusinessException(ErrorCode.NO_AUTH);
+        }
+        return (User) attribute;
+    }
+
+    /**
+     * 判断是否是管理员
+     *
+     * @param request
+     * @return
+     */
+    @Override
+    public boolean isAdmin(HttpServletRequest request) {
+        Object attribute = request.getSession().getAttribute(USER_LOGIN_STATE);
+        User user = (User) attribute;
+        if (user == null) {
+            return false;
+        }
+        return user.getUserRole() == ADMIN_USERROLE;
+    }
+
+    /**
+     * 判断是否为管理员
+     * @param loginUser
+     * @return
+     */
+    @Override
+    public boolean isAdmin(User loginUser) {
+        return loginUser != null && loginUser.getUserRole() == ADMIN_USERROLE;
     }
 
     @Override

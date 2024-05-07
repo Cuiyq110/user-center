@@ -107,7 +107,7 @@ public class UserController {
          * //如果不是管理员，返回一个空数组
          *
          */
-        if (!isAdmin(request)) {
+        if (!userService.isAdmin(request)) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "不是管理员");
         }
         QueryWrapper queryWrapper = new QueryWrapper<User>();
@@ -142,6 +142,18 @@ public class UserController {
         return ResultUtils.success(userList);
     }
 
+    @PostMapping("/update")
+    public BaseResponse<Integer> userUpdate(@RequestBody User user, HttpServletRequest request) {
+        //校验参数是否为空
+        if (user == null) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+//        2.鉴权
+        User loginUser = userService.getLoginUser(request);
+
+//        3.触发更新
+        return ResultUtils.success(userService.updateUser(user, loginUser));
+    }
     /**
      * 删除用户
      *
@@ -151,7 +163,7 @@ public class UserController {
     @PostMapping("/delete")
     public BaseResponse<Boolean> userDelete(@Param("id") Long id, HttpServletRequest request) {
 //      鉴权
-        if (!isAdmin(request)) {
+        if (!userService.isAdmin(request)) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "不是管理员");
         }
 
@@ -164,18 +176,5 @@ public class UserController {
         return ResultUtils.success(b);
     }
 
-    /**
-     * 判断是否是管理员
-     *
-     * @param request
-     * @return
-     */
-    public boolean isAdmin(HttpServletRequest request) {
-        Object attribute = request.getSession().getAttribute(USER_LOGIN_STATE);
-        User user = (User) attribute;
-        if (user == null) {
-            return false;
-        }
-        return user.getUserRole() == ADMIN_USERROLE;
-    }
+
 }
