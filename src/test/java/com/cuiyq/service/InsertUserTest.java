@@ -86,20 +86,22 @@ private ExecutorService executorService = new ThreadPoolExecutor(16, 1000, 10000
     }
 
     /**
-     * 并发批量插入用户   100000  耗时： 26830ms
+     * 并发批量插入用户   5000 耗时： 59930ms
+     * 1000  16825
+     * 10000 93190
+     * 十万  989481
      */
     @Test
     public void doConcurrencyInsertUser() {
         StopWatch stopWatch = new StopWatch();
         stopWatch.start();
-        final int INSERT_NUM = 100000;
+        int batchSize = 1000;
         // 分十组
         int j = 0;
-        //批量插入数据的大小
-        int batchSize = 5000;
+
         List<CompletableFuture<Void>> futureList = new ArrayList<>();
-        // i 要根据数据量和插入批量来计算需要循环的次数。（鱼皮这里直接取了个值，会有问题,我这里随便写的）
-        for (int i = 0; i < INSERT_NUM/batchSize; i++) {
+        // i 要根据数据量和插入批量来计算需要循环的次数。
+        for (int i = 0; i < 100; i++) { //插入10万
             List<User> userList = new ArrayList<>();
             while (true){
                 j++;
