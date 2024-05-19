@@ -1,6 +1,7 @@
 package com.cuiyq.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.cuiyq.common.BaseResponse;
 import com.cuiyq.common.ErrorCode;
 import com.cuiyq.common.ResultUtils;
@@ -133,12 +134,10 @@ public class UserController {
      * @return
      */
     @GetMapping("/recommend")
-    public BaseResponse<List<User>> recommendUsers(HttpServletRequest request) {
+    public BaseResponse<Page<User>> recommendUsers(long pageSize, long pageNum, HttpServletRequest request) {
         QueryWrapper<User> objectQueryWrapper = new QueryWrapper<>();
-        List<User> list = userService.list(objectQueryWrapper);
-        List<User> collect = list.stream().map(user -> userService.getSafetyUser(user)).collect(Collectors.toList());
-        return ResultUtils.success(collect);
-
+        Page<User> page = userService.page(new Page<>(pageNum, pageSize),objectQueryWrapper);
+        return ResultUtils.success(page);
     }
 
     /**
