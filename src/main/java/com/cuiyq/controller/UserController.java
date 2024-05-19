@@ -128,6 +128,20 @@ public class UserController {
     }
 
     /**
+     * 主页推荐页接口
+     * @param request
+     * @return
+     */
+    @GetMapping("/recommend")
+    public BaseResponse<List<User>> recommendUsers(HttpServletRequest request) {
+        QueryWrapper<User> objectQueryWrapper = new QueryWrapper<>();
+        List<User> list = userService.list(objectQueryWrapper);
+        List<User> collect = list.stream().map(user -> userService.getSafetyUser(user)).collect(Collectors.toList());
+        return ResultUtils.success(collect);
+
+    }
+
+    /**
      * 根据标签查询
      *
      * @param tagNameList
