@@ -9,8 +9,11 @@ import com.cuiyq.exception.BusinessException;
 import com.cuiyq.model.domain.User;
 import com.cuiyq.model.domain.request.UserRegisterRequest;
 import com.cuiyq.service.UserService;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,9 +21,8 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
-
-import static com.cuiyq.contant.UserContant.ADMIN_USERROLE;
 import static com.cuiyq.contant.UserContant.USER_LOGIN_STATE;
 
 /**
@@ -30,12 +32,15 @@ import static com.cuiyq.contant.UserContant.USER_LOGIN_STATE;
  */
 @RestController
 @RequestMapping("/user")
+@Slf4j
 @CrossOrigin(origins = {"http://localhost:5173"})
 public class UserController {
 
     @Resource
     private UserService userService;
 
+    @Resource
+    private RedisTemplate redisTemplate;
 
 
     @PostMapping("/logout")
@@ -135,9 +140,25 @@ public class UserController {
      */
     @GetMapping("/recommend")
     public BaseResponse<Page<User>> recommendUsers(long pageSize, long pageNum, HttpServletRequest request) {
+        User loginUser = userService.getLoginUser(request);
+        String redisKey = String.format("cuiyq:user:recommend:%s", loginUser.getId());
+        ValueOperations valueOperations = redisTemplate.opsForValue();
+//        判断如果有缓存，直接读取
+        Page<User> userPage = (Page<User>) valueOperations.get(redisKey);
+        if (userPage != null)
+        {
+            return ResultUtils.success(userPage);
+        }
+//       否则，无缓存，查询数据库
         QueryWrapper<User> objectQueryWrapper = new QueryWrapper<>();
-        Page<User> page = userService.page(new Page<>(pageNum, pageSize),objectQueryWrapper);
-        return ResultUtils.success(page);
+        userPage = userService.page(new Page<>(pageNum, pageSize),objectQueryWrapper);
+//        写入缓存30s失效
+        try {
+            valueOperations.set(redisKey,userPage,30000, TimeUnit.MILLISECONDS);
+        } catch (Exception e) {
+            log.error("redis set key error", e);
+        }
+        return ResultUtils.success(userPage);
     }
 
     /**
