@@ -7,7 +7,7 @@ import com.cuiyq.common.ErrorCode;
 import com.cuiyq.common.ResultUtils;
 import com.cuiyq.exception.BusinessException;
 import com.cuiyq.model.domain.User;
-import com.cuiyq.model.domain.request.UserRegisterRequest;
+import com.cuiyq.model.request.UserRegisterRequest;
 import com.cuiyq.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
