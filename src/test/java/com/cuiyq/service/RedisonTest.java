@@ -1,6 +1,5 @@
 package com.cuiyq.service;
 
-import com.cuiyq.config.RedissonConfig;
 import org.junit.jupiter.api.Test;
 import org.redisson.api.RList;
 import org.redisson.api.RLock;
