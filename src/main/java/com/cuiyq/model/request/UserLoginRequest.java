@@ -1,4 +1,4 @@
-package com.cuiyq.model.domain.request;
+package com.cuiyq.model.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -19,8 +19,8 @@ import java.io.Serializable;
 @AllArgsConstructor
 public class UserLoginRequest implements Serializable {
 
-    private static final long serialVersionUID = 42L;
 
+    private static final long serialVersionUID = -4063614549540352718L;
     private String userAccount;
     private String userPassword;
 }
