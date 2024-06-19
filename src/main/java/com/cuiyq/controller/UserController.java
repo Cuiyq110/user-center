@@ -182,7 +182,7 @@ public class UserController {
         if (user == null) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
-//        2.鉴权
+//        2.鉴权1
         User loginUser = userService.getLoginUser(request);
 
 //        3.触发更新
